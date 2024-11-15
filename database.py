@@ -1,22 +1,25 @@
 import mysql.connector
-import pandas as pd
 
-
-def get_data_from_database():
-    # Connexion à la base de données MySQL
-    conn = mysql.connector.connect(
+def connect_to_database():
+    """Établit une connexion à la base de données MySQL."""
+    return mysql.connector.connect(
         host="localhost",
-        user="root",  # Remplacez par votre nom d'utilisateur MySQL
-        password="",  # Remplacez par votre mot de passe MySQL
+        user="root",       # Remplacez par votre utilisateur MySQL
+        password="",   # Remplacez par votre mot de passe MySQL
         database="traceforum",
-        port=3306
+        port=3308
     )
 
-    # Extraction des données
-    query = """
-    SELECT Utilisateur, Titre, Date, Heure
-    FROM transition
-    """
-    data = pd.read_sql(query, conn)
-    conn.close()
-    return data
+def get_table_data(table_name):
+    """Récupère les données d'une table spécifique."""
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(f"SELECT * FROM {table_name}")
+        data = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return data
+    except Exception as e:
+        print(f"Erreur lors de la récupération des données de la table {table_name} : {e}")
+        return []
