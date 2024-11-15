@@ -1,3 +1,5 @@
+import random
+
 import pandas as pd
 import numpy as np
 
@@ -6,13 +8,46 @@ def exclude_users(data, exclusion_list):
     return data[~data['Utilisateur'].isin(exclusion_list)]
 
 def assign_random_groups(data, group_names):
-    """Assigne chaque utilisateur à un groupe aléatoire."""
-    # Créer une affectation aléatoire unique pour chaque utilisateur
-    unique_users = data['Utilisateur'].unique()
-    user_to_group = {user: np.random.choice(group_names) for user in unique_users}
+    """
+    Assigne chaque utilisateur à un groupe aléatoire avec un nombre équilibré d'utilisateurs par groupe.
 
-    # Ajouter une colonne 'Groupe' en mappant les utilisateurs à leurs groupes
-    data['Groupe'] = data['Utilisateur'].map(user_to_group)
+    Parameters:
+        data (DataFrame): Les données contenant les utilisateurs.
+        group_names (list): Liste des noms des groupes.
+
+    Returns:
+        DataFrame: Les données avec une nouvelle colonne 'Groupe'.
+    """
+    # Récupérer les utilisateurs uniques
+    unique_users = data['Utilisateur'].unique()
+
+    # Mélanger les utilisateurs aléatoirement
+    random.shuffle(unique_users)
+
+    # Calculer la répartition aléatoire mais équilibrée
+    num_users = len(unique_users)
+    num_groups = len(group_names)
+    base_size = num_users // num_groups  # Taille de base pour chaque groupe
+    extra_users = num_users % num_groups  # Reste à répartir aléatoirement
+
+    # Créer les groupes avec des tailles équilibrées
+    group_sizes = [base_size + 1 if i < extra_users else base_size for i in range(num_groups)]
+    random.shuffle(group_sizes)  # Mélanger les tailles des groupes pour plus de variabilité
+
+    # Répartir les utilisateurs dans les groupes
+    group_assignments = []
+    start_idx = 0
+    for group_name, group_size in zip(group_names, group_sizes):
+        end_idx = start_idx + group_size
+        for user in unique_users[start_idx:end_idx]:
+            group_assignments.append((user, group_name))
+        start_idx = end_idx
+
+    # Convertir en DataFrame pour le mappage
+    group_df = pd.DataFrame(group_assignments, columns=['Utilisateur', 'Groupe'])
+
+    # Fusionner les groupes dans les données originales
+    data = data.merge(group_df, on='Utilisateur', how='left')
     return data
 
 def calculate_weighted_scores(data, weights):
