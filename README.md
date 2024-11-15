@@ -25,7 +25,6 @@ Clonez le projet depuis GitHub (ou votre plateforme de gestion de code) :
 
 ```bash
 git clone https://github.com/carellihoula/DataAnalysisForum.git
-cd DataAnalysisForum
 ```
 ```bash
 cd DataAnalysisForum

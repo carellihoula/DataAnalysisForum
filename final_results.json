@@ -1,13 +1,13 @@
 {
     "nombre_utilisateurs_par_groupe": {
-        "Groupe1": 7,
-        "Groupe2": 6,
+        "Groupe1": 6,
+        "Groupe2": 7,
         "Groupe3": 7
     },
     "nombre_total_utilisateurs": 20,
     "scores_pondérés_normalisés": {
-        "Groupe1": 39.515900605124244,
-        "Groupe2": 39.04467619415475,
-        "Groupe3": 21.439423200721
+        "Groupe1": 14.279644650444187,
+        "Groupe2": 34.171494785631516,
+        "Groupe3": 51.54886056392429
     }
 }
