@@ -1,7 +1,7 @@
 {
-    "taux_participation": {
-        "Groupe 1": 33.864509605662285,
-        "Groupe 2": 33.395348837209305,
-        "Groupe 3": 32.74014155712841
+    "scores_totaux_par_groupe": {
+        "Groupe1": 14.270920975988608,
+        "Groupe2": 20.854868385772534,
+        "Groupe3": 64.87421063823886
     }
 }
